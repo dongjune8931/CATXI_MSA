@@ -1,0 +1,41 @@
+server:
+  port: 0
+
+spring:
+  application:
+    name: chat-service
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/catxi_MSA_CHAT
+    username: root
+    password: dpsjwl58
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+    redis:
+      host: localhost
+      port: 6379
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          # 개발용: HS256 공유 시크릿 (게이트웨이/다른 서비스와 동일)
+          secret-key: "q9wgeHTWsbeRlSFfx2bMLfqLfP+QAl3v0L2FZ/F26CnMk0zlm+TqtqFEorqD54Nbzh4xqTa7kPgu2QTffrQ48A=="
+          # 운영 전환 시 jwk-set-uri 사용 권장
+          # jwk-set-uri: http://localhost:8000/auth-service/.well-known/jwks.json
+
+eureka:
+  instance:
+    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+  client:
+    service-url:
+      defaultZone: http://127.0.0.1:8761/eureka
+    fetch-registry: true
+    register-with-eureka: true
+
+logging:
+  level:
+    org.springframework.security: INFO

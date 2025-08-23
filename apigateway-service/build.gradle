@@ -36,6 +36,13 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'io.projectreactor:reactor-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+    // ✅ 게이트웨이에서 JWT 검증 (엣지 인증)
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
+
+    // ✅ 헬스/메트릭/환경 노출
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
 }
 
 dependencyManagement {

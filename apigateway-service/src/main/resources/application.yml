@@ -8,6 +8,11 @@ eureka:
     service-url:
       defaultZone: http://localhost:8761/eureka
 spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          secret-key: "q9wgeHTWsbeRlSFfx2bMLfqLfP+QAl3v0L2FZ/F26CnMk0zlm+TqtqFEorqD54Nbzh4xqTa7kPgu2QTffrQ48A=="
   application:
     name: apigateway-service
   cloud:
@@ -29,10 +34,13 @@ spring:
               uri: lb://USER-SERVICE
               predicates:
                 - Path=/user-service/**
-            - id: chat-service
-              uri: lb://CHAT-SERVICE
+            - id: chat-service-ws
+              uri: lb:ws://CHAT-SERVICE
               predicates:
-                - Path=/chat-service/**
+                 - Path=/chat-service/connect
+                 - Header=Upgrade, websocket
+              filters:
+                  - StripPrefix=1
             - id: notification-service
               uri: lb://NOTIFICATION-SERVICE
               predicates:
@@ -41,3 +49,28 @@ spring:
               uri: lb://MAP-SERVICE
               predicates:
                 - Path=/map-service/**
+          globalcors:
+            cors-configurations:
+              '[/**]':
+                          allowedOrigins:
+                            - "http://localhost:5173"
+                            - "https://catxi.kro.kr"
+                            - "https://catxi-university-taxi-b0936.web.app"
+                          allowedMethods: [ GET, POST, PUT, PATCH, DELETE, OPTIONS ]
+                          allowedHeaders: [ "*" ]
+                          exposedHeaders: [ "*" ]
+                          allowCredentials: true
+                          maxAge: 3600
+            add-to-simple-url-handler-mapping: true
+
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+          - refresh
+          - health
+          - beans
+          - info
+          - httpexchanges
